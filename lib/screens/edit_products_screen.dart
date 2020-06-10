@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../providers/products.dart';
+import '../widgets/image_input.dart';
 
 class EditProductsScreen extends StatefulWidget {
   static const screenName = 'edit-products';
@@ -35,6 +38,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   var _isInit = true; //to make sure that i don't tun this too often
   var _isLoading = false;
+  File _pickedImage;
+
+  void _selectedImage(File pickedImage) {
+    _pickedImage = pickedImage;
+  }
 
   @override
   void initState() {
@@ -93,10 +101,12 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       _isLoading = true;
     });
     try {
-      if (_editedProduct.id != null) {//Edit exist product
+      if (_editedProduct.id != null) {
+        //Edit exist product
         await Provider.of<Products>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
-      } else {//add new product
+      } else {
+        //add new product
         await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
       }
@@ -285,8 +295,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                               },
                             ),
                           ),
+                          
                         ],
                       ),
+                      SizedBox(height: 10),
+                      ImageInput(_selectedImage),
                     ],
                   ),
                 ),
