@@ -2,9 +2,12 @@
 
 A new Flutter project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+In this projec: 
+1. You can add new products.
+2. You can order it.
+3. You can manage your products.
+4. Login and Logout by using API integration.
+5. Select your favorite products.
 
 A few resources to get you started if this is your first Flutter project:
 

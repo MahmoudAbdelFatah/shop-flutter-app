@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wc_form_validators/wc_form_validators.dart';
 
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -14,10 +15,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
-    // transformConfig.translate(-10.0);
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
@@ -48,7 +46,6 @@ class AuthScreen extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
                         ..translate(-10.0),
-                      // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.deepOrange.shade900,
@@ -252,11 +249,10 @@ class _AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value.isEmpty || !value.contains('@')) {
-                      return 'Invalid email!';
-                    }
-                  },
+                  validator: Validators.compose([
+                    Validators.required('Email is required'),
+                    Validators.email('Invalid email address'),
+                  ]),
                   onSaved: (value) {
                     _authData['email'] = value;
                   },
@@ -265,11 +261,12 @@ class _AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   controller: _passwordController,
-                  validator: (value) {
-                    if (value.isEmpty || value.length < 5) {
-                      return 'Password is too short!';
-                    }
-                  },
+                  validator: Validators.compose([
+                    Validators.required('Password is required'),
+                    Validators.patternString(
+                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+                        'Invalid Password'),
+                  ]),
                   onSaved: (value) {
                     _authData['password'] = value;
                   },
